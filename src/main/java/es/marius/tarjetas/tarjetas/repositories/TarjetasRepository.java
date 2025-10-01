@@ -9,6 +9,6 @@ public interface TarjetasRepository {
 
     List<Tarjeta> findAll();
     List<Tarjeta> findAllByNumero(String numero);
-    Optional<Tarjeta> findById(int id);
+    Optional<Tarjeta> findById(Long id);
 
 }

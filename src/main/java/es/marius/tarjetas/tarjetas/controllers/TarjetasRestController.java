@@ -5,10 +5,8 @@ import es.marius.tarjetas.tarjetas.models.Tarjeta;
 import es.marius.tarjetas.tarjetas.repositories.TarjetasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 @RequestMapping("api/${api.version}/tarjetas")
@@ -30,5 +28,23 @@ public class TarjetasRestController {
         }else{
             return ResponseEntity.ok(tarjetasRepository.findAll());
         }
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Tarjeta> getTarjetaById(@PathVariable Long id) {
+
+        //Estilo Funcional:
+        return tarjetasRepository.findById(id)
+                                .map(ResponseEntity::ok)
+                                .orElse(ResponseEntity.notFound().build());
+
+        /* Otra Forma de hacerlo LLamado Estilo Estructurado:
+
+            Optional<Tarjeta> tarjeta = tarjetasRepository.findById(id);
+            if(tarjeta.isPresent()){
+                return ResponseEntity.ok(tarjeta.get());
+            }else{
+                return ResponseEntity.notFound().build();
+            }*/
     }
 }
