@@ -4,6 +4,15 @@ GET https://examples.http-client.intellij.net/get
 
 ###
 
-### getTarjetaById
+### getTarjetasALl
+GET http://localhost:3000/api/v1/tarjetas
 
+### getTarjetasAllByNumeroAndTitular
+GET http://localhost:3000/api/v1/tarjetas?numero=9101-2345&titular=marius;
+
+### getTarjetaById
 GET http://localhost:3000/api/v1/tarjetas/1
+
+### getTarjetaById(que no existe)
+GET http://localhost:3000/api/v1/tarjetas/3
+
