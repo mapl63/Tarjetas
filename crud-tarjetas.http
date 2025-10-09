@@ -16,3 +16,31 @@ GET http://localhost:3000/api/v1/tarjetas/1
 ### getTarjetaById(que no existe)
 GET http://localhost:3000/api/v1/tarjetas/3
 
+###Nueva tarjeta
+POST http://localhost:3000/api/v1/tarjetas
+content-type: application/json
+
+{
+    "numero": "2222-5678-1234-5678",
+    "cvc": "123",
+    "fechaCaducidad" : "2029-12-31",
+    "titular": "Maria",
+    "saldo": 300.0
+}
+
+### Actualiza tarjeta
+PUT http://localhost:3000/api/v1/tarjetas/1
+Content-Type: application/json
+
+{
+  "numero": "2222-5678-1234-5678",
+  "cvc": "123",
+  "fechaCaducidad": "2029-12-31",
+  "titular": "María",
+  "saldo": 300.0
+}
+
+
+### Delete tarjeta
+DELETE http://localhost:3000/api/v1/tarjetas/2
+

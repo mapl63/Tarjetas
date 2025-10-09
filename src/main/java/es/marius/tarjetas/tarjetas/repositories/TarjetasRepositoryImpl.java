@@ -59,5 +59,54 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
         return tarjetas.get(id) !=  null ? Optional.of(tarjetas.get(id)) : Optional.empty();
     }
 
+    @Override
+    public Optional<Tarjeta> findByUuid(UUID uuid) {
+        log.info("Buscando tarjetas por uuid: " + uuid);
+        return tarjetas.values().stream()
+                .filter(t-> t.getUuid().equals(uuid))
+                .findFirst();
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        log.info("Comprobando si existe tarjeta por id: " + id);
+        return tarjetas.get(id) !=  null;
+    }
+
+    @Override
+    public boolean existsByUuid(UUID uuid) {
+        log.info("Comporobando si existe tarjeta por uuid: " + uuid);
+        return tarjetas.values().stream()
+                .anyMatch(t-> t.getUuid().equals(uuid));
+    }
+
+    @Override
+    public Tarjeta save(Tarjeta tarjeta) {
+        log.info("Guardando tarjeta: " + tarjeta);
+
+        tarjetas.put(tarjeta.getId(), tarjeta);
+        return tarjeta;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        log.info("Borrando tarjeta por id: " + id);
+        tarjetas.remove(id);
+    }
+
+    @Override
+    public void deleteByUuid(UUID uuid) {
+        log.info("Borrando tarjeta por uuid: " + uuid);
+        tarjetas.values().removeIf(t-> t.getUuid().equals(uuid));
+    }
+
+    @Override
+    public Long nextId() {
+        log.debug("Obteniendo siguiente id de tarjeta");
+        return tarjetas.keySet().stream()
+                .mapToLong(val -> val)
+                .max()
+                .orElse(0) + 1;
+    }
 
 }

@@ -1,6 +1,9 @@
 package es.marius.tarjetas.tarjetas.controllers;
 
 
+import es.marius.tarjetas.tarjetas.dto.TarjetaCreateDto;
+import es.marius.tarjetas.tarjetas.dto.TarjetaResponseDto;
+import es.marius.tarjetas.tarjetas.dto.TarjetaUpdateDto;
 import es.marius.tarjetas.tarjetas.models.Tarjeta;
 import es.marius.tarjetas.tarjetas.services.TarjetasService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ public class TarjetasRestController {
 
     @Autowired
     public TarjetasRestController(TarjetasService tarjetasService) {
+
         this.tarjetasService = tarjetasService;
     }
 
@@ -45,5 +49,31 @@ public class TarjetasRestController {
             }else{
                 return ResponseEntity.notFound().build();
             }*/
+    }
+
+    @PostMapping()
+    public ResponseEntity<TarjetaResponseDto> create(@RequestBody TarjetaCreateDto tarjetaCreateDto) {
+        log.info("Creando tarjeta {}", tarjetaCreateDto);
+        var saved = tarjetasService.save(tarjetaCreateDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Tarjeta> update(@PathVariable Long id,@RequestBody TarjetaUpdateDto tarjetaUpdateDto) {
+        log.info("Actualizando tarjeta por id={} con tarjeta={}", id, tarjetaUpdateDto);
+        return ResponseEntity.ok(tarjetasService.update(id, tarjetaUpdateDto));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Tarjeta> updatePartial(@PathVariable Long id,@RequestBody TarjetaUpdateDto tarjetaUpdateDto) {
+        log.info("Actualizando parcialmente tarjeta con id={} con tarjeta={}", id,tarjetaUpdateDto);
+        return ResponseEntity.ok(tarjetasService.update(id, tarjetaUpdateDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Tarjeta> delete(@PathVariable Long id) {
+        log.info("Eliminando tarjeta con id={}", id);
+        tarjetasService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
