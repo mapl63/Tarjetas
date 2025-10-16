@@ -6,10 +6,15 @@ import es.marius.tarjetas.tarjetas.dto.TarjetaResponseDto;
 import es.marius.tarjetas.tarjetas.dto.TarjetaUpdateDto;
 import es.marius.tarjetas.tarjetas.models.Tarjeta;
 import es.marius.tarjetas.tarjetas.services.TarjetasService;
+
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -52,7 +57,7 @@ public class TarjetasRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<TarjetaResponseDto> create(@RequestBody TarjetaCreateDto tarjetaCreateDto) {
+    public ResponseEntity<TarjetaResponseDto> create(@Valid @RequestBody TarjetaCreateDto tarjetaCreateDto) {
         log.info("Creando tarjeta {}", tarjetaCreateDto);
         var saved = tarjetasService.save(tarjetaCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
@@ -76,4 +81,18 @@ public class TarjetasRestController {
         tarjetasService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldNAme = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldNAme, errorMessage);
+        });
+        return errors;
+    }
+
+
 }
