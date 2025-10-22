@@ -14,11 +14,29 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
 
     private final Map<Long, Tarjeta> tarjetas = new LinkedHashMap<>(
             Map.of(
-            1L, new Tarjeta(1L,"1234-5678","555", LocalDate.of(2025,12,31), "juan",200.0,
-                            LocalDateTime.now(),LocalDateTime.now(), UUID.randomUUID()),
+            1L, Tarjeta.builder()
+                                    .id(1L)
+                                    .numero("1234")
+                                    .cvc("555")
+                                    .titular("Juan antonio")
+                                    .fechaCaducidad(LocalDate.of(2025,12,31))
+                                    .saldo(100.0)
+                                    .createdAt(LocalDateTime.now())
+                                    .updatedAt(LocalDateTime.now())
+                                    .uuid(UUID.randomUUID())
+                            .build(),
 
-            2L, new Tarjeta(2L,"9101-2345","111", LocalDate.of(2025,8,21), "marius",2000.0,
-                            LocalDateTime.now(),LocalDateTime.now(), UUID.randomUUID())
+            2L, Tarjeta.builder()
+                            .id(2L)
+                            .numero("5678")
+                            .cvc("666")
+                            .titular("Marius puruguay")
+                            .fechaCaducidad(LocalDate.of(2024,6,14))
+                            .saldo(1500.0)
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .uuid(UUID.randomUUID())
+                            .build()
             )
     );
 

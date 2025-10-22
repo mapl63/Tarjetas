@@ -3,10 +3,12 @@ package es.marius.tarjetas.tarjetas.dto;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
+@Builder
 @Data
 public class TarjetaCreateDto {
 

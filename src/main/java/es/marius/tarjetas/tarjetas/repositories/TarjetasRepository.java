@@ -30,4 +30,5 @@ public interface TarjetasRepository {
     void deleteByUuid(UUID uuid);
 
     Long nextId();
+
 }
