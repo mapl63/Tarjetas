@@ -8,9 +8,9 @@ import es.marius.tarjetas.tarjetas.models.Tarjeta;
 import es.marius.tarjetas.tarjetas.services.TarjetasService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +21,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 @Slf4j
 @RequestMapping("api/${api.version}/tarjetas")
 @RestController
 public class TarjetasRestController {
 
     private final TarjetasService tarjetasService;
-
-    @Autowired
-    public TarjetasRestController(TarjetasService tarjetasService) {
-
-        this.tarjetasService = tarjetasService;
-    }
 
 
     @GetMapping()
