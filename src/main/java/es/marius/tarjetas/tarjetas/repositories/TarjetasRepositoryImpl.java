@@ -15,15 +15,15 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
     private final Map<Long, Tarjeta> tarjetas = new LinkedHashMap<>(
             Map.of(
             1L, Tarjeta.builder()
-                                    .id(1L)
-                                    .numero("1234")
-                                    .cvc("555")
-                                    .titular("Juan antonio")
-                                    .fechaCaducidad(LocalDate.of(2025,12,31))
-                                    .saldo(100.0)
-                                    .createdAt(LocalDateTime.now())
-                                    .updatedAt(LocalDateTime.now())
-                                    .uuid(UUID.randomUUID())
+                            .id(1L)
+                            .numero("1234")
+                            .cvc("555")
+                            .titular("Juan antonio")
+                            .fechaCaducidad(LocalDate.of(2025,12,31))
+                            .saldo(100.0)
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .uuid(UUID.randomUUID())
                             .build(),
 
             2L, Tarjeta.builder()
@@ -43,7 +43,9 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
     @Override
     public List<Tarjeta> findAll() {
         log.info("Buscando tarjetas");
-        return tarjetas.values().stream().toList();
+        return tarjetas.values()
+                .stream()
+                .toList();
     }
 
     @Override
