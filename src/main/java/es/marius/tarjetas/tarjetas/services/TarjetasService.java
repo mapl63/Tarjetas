@@ -10,15 +10,15 @@ import java.util.*;
 
 @Service
 public interface TarjetasService  {
-    List<Tarjeta> findAll(String numero, String titular);
+    List<TarjetaResponseDto> findAll(String numero, String titular);
 
-    Tarjeta findById(Long id);
+    TarjetaResponseDto findById(Long id);
 
-    Tarjeta findbyUuid(String uuid);
+    TarjetaResponseDto findByUuid(String uuid);
 
     TarjetaResponseDto save(TarjetaCreateDto tarjetaCreateDto);
 
-    Tarjeta update(Long id, TarjetaUpdateDto tarjetaUpdateDto);
+    TarjetaResponseDto update(Long id, TarjetaUpdateDto tarjetaUpdateDto);
 
     void deleteById(Long id);
 }

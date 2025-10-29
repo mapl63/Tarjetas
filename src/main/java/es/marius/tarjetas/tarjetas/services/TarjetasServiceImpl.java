@@ -3,6 +3,7 @@ package es.marius.tarjetas.tarjetas.services;
 import es.marius.tarjetas.tarjetas.dto.TarjetaCreateDto;
 import es.marius.tarjetas.tarjetas.dto.TarjetaResponseDto;
 import es.marius.tarjetas.tarjetas.dto.TarjetaUpdateDto;
+import es.marius.tarjetas.tarjetas.exceptions.TarjetaBadUuidException;
 import es.marius.tarjetas.tarjetas.exceptions.TarjetaNotFound;
 import es.marius.tarjetas.tarjetas.mappers.TarjetaMapper;
 import es.marius.tarjetas.tarjetas.models.Tarjeta;
@@ -34,28 +35,31 @@ public class TarjetasServiceImpl implements TarjetasService {
 
 
     @Override
-    public List<Tarjeta> findAll(String numero, String titular){
+    public List<TarjetaResponseDto> findAll(String numero, String titular){
+
         if((numero==null || numero.isEmpty()) && (titular==null || titular.isEmpty())){
             log.info("Buscamos todas las tarjetas");
-            return tarjetasRepository.findAll();
+            return tarjetaMapper.toTarjetaResponseDtoList(tarjetasRepository.findAll());
         }
+
         if((numero != null && !numero.isEmpty()) && (titular == null || titular.isEmpty())){
-            log.info("Buscamos las tarjetas por numero: " + numero);
-            return tarjetasRepository.findAllByNumero(numero);
+            log.info("Buscamos las tarjetas por numero: ´{} " , numero);
+            return tarjetaMapper.toTarjetaResponseDtoList(tarjetasRepository.findAllByNumero(numero));
         }
 
         if(numero== null || numero.isEmpty()){
-            log.info("Buscamos las tarjetas por titular: " + titular);
-            return tarjetasRepository.findAllByTitular(titular);
+            log.info("Buscamos las tarjetas por titular: {}" , titular);
+            return tarjetaMapper.toTarjetaResponseDtoList(tarjetasRepository.findAllByTitular(titular));
         }
 
-        log.info("Buscando productos pro numero: " + numero + "y titular: " + titular);
-        return tarjetasRepository.findAllByNumeroAndTitular(numero, titular);
+        log.info("Estamos en service y busco por numero: {} y titular: {}",numero , titular);
+        return tarjetaMapper.toTarjetaResponseDtoList(tarjetasRepository.findAllByNumeroAndTitular(numero, titular));
     }
 
+
+    @Cacheable(key = "#id")
     @Override
-    @Cacheable
-    public Tarjeta findById(Long id){
+    public TarjetaResponseDto findById(Long id){
 
         /* La manera mas larga pero normalmente correcta:
         Optional<Tarjeta> tarjetaEncontrada = tarjetasRepository.findById(id);
@@ -66,19 +70,29 @@ public class TarjetasServiceImpl implements TarjetasService {
         }*/
 
         //Es igual que el codigo anterior pero en una sola linea:
-        return tarjetasRepository.findById(id).orElseThrow(()-> new TarjetaNotFound(id));
+        return tarjetaMapper.toTarjetaResponseDto(tarjetasRepository.findById(id).orElseThrow(()-> new TarjetaNotFound(id)));
     }
 
+
+    @Cacheable(key = "#uuid")
     @Override
-    @Cacheable
-    public Tarjeta findbyUuid(String uuid){
-        log.info("Buscamos tarjeta s por uuid: " + uuid);
-        var myUUID = UUID.fromString(uuid);
-        return tarjetasRepository.findByUuid(myUUID).orElse(null);
+    public TarjetaResponseDto findByUuid(String uuid){
+
+        log.info("Buscando tarjeta por uuid: {}", uuid);
+
+        try {
+            var myUUID = UUID.fromString(uuid);
+            return tarjetaMapper.toTarjetaResponseDto(tarjetasRepository.findByUuid(myUUID)
+                    .orElseThrow(()-> new TarjetaBadUuidException(uuid)));
+        }catch (IllegalArgumentException e){
+            throw new TarjetaBadUuidException(uuid);
+        }
+
     }
 
+
+    @CachePut(key = "#result.id")
     @Override
-    @CachePut
     public TarjetaResponseDto save(TarjetaCreateDto tarjetaCreateDto){
         log.info("Guardando tarjeta: " + tarjetaCreateDto);
 
@@ -90,26 +104,23 @@ public class TarjetasServiceImpl implements TarjetasService {
 
     }
 
+    @CachePut(key ="#result.id")
     @Override
-    @CachePut
-    public Tarjeta update(Long id, TarjetaUpdateDto tarjetaUpdateDto){
+    public TarjetaResponseDto update(Long id, TarjetaUpdateDto tarjetaUpdateDto){
         log.info("Actualizando tarjeta por id: " + id);
 
-        var tarjetaActual = this.findById(id);
+        var tarjetaActual = tarjetasRepository.findById(id).orElseThrow(()-> new TarjetaNotFound(id));
 
         Tarjeta tarjetaActualizada  = tarjetaMapper.toTarjeta(tarjetaUpdateDto, tarjetaActual);
 
-        return tarjetasRepository.save(tarjetaActualizada);
+        return tarjetaMapper.toTarjetaResponseDto(tarjetasRepository.save(tarjetaActualizada));
     }
 
+    @CacheEvict(key = "#id")
     @Override
-    @CacheEvict
     public void deleteById(Long id){
-        log.debug("Eliminando tarjeta por id: " + id);
-        var tarjetaEncontrada = this.findById(id);
-
-        if(tarjetaEncontrada != null){
-            tarjetasRepository.deleteById(id);
-        }
+        log.debug("Eliminando tarjeta por id:{} ", id);
+        tarjetasRepository.findById(id).orElseThrow(()-> new TarjetaNotFound(id));
+        tarjetasRepository.deleteById(id);
     }
 }

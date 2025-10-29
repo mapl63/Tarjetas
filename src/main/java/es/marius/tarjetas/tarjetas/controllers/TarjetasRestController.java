@@ -31,14 +31,14 @@ public class TarjetasRestController {
 
 
     @GetMapping()
-    public ResponseEntity<List<Tarjeta>> getAllTarjetas(@RequestParam(required = false) String numero,
+    public ResponseEntity<List<TarjetaResponseDto>> getAllTarjetas(@RequestParam(required = false) String numero,
                                                         @RequestParam(required = false) String titular) {
         log.info("Buscando tarjetas por numero {} y titular {}", numero, titular);
         return ResponseEntity.ok(tarjetasService.findAll(numero, titular));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tarjeta> getTarjetaById(@PathVariable Long id) {
+    public ResponseEntity<TarjetaResponseDto> getTarjetaById(@PathVariable Long id) {
         log.info("Buscando tarjeta por id {}", id);
         //Estilo Funcional:
         return ResponseEntity.ok(tarjetasService.findById(id));
@@ -61,19 +61,19 @@ public class TarjetasRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tarjeta> update(@PathVariable Long id,@RequestBody TarjetaUpdateDto tarjetaUpdateDto) {
+    public ResponseEntity<TarjetaResponseDto> update(@PathVariable Long id,@RequestBody TarjetaUpdateDto tarjetaUpdateDto) {
         log.info("Actualizando tarjeta por id={} con tarjeta={}", id, tarjetaUpdateDto);
         return ResponseEntity.ok(tarjetasService.update(id, tarjetaUpdateDto));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Tarjeta> updatePartial(@PathVariable Long id,@RequestBody TarjetaUpdateDto tarjetaUpdateDto) {
+    public ResponseEntity<TarjetaResponseDto> updatePartial(@PathVariable Long id,@RequestBody TarjetaUpdateDto tarjetaUpdateDto) {
         log.info("Actualizando parcialmente tarjeta con id={} con tarjeta={}", id,tarjetaUpdateDto);
         return ResponseEntity.ok(tarjetasService.update(id, tarjetaUpdateDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Tarjeta> delete(@PathVariable Long id) {
+    public ResponseEntity<TarjetaResponseDto> delete(@PathVariable Long id) {
         log.info("Eliminando tarjeta con id={}", id);
         tarjetasService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

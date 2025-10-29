@@ -18,8 +18,8 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
                             .id(1L)
                             .numero("1234")
                             .cvc("555")
-                            .titular("Juan antonio")
                             .fechaCaducidad(LocalDate.of(2025,12,31))
+                            .titular("Juan")
                             .saldo(100.0)
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
@@ -30,8 +30,8 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
                             .id(2L)
                             .numero("5678")
                             .cvc("666")
-                            .titular("Marius puruguay")
                             .fechaCaducidad(LocalDate.of(2024,6,14))
+                            .titular("Marius puruguay")
                             .saldo(1500.0)
                             .createdAt(LocalDateTime.now())
                             .updatedAt(LocalDateTime.now())
@@ -61,15 +61,15 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
         return tarjetas.values()
                         .stream()
                         .filter(t->
-                                t.getTitular().contains(titular.toLowerCase())).toList();
+                                t.getTitular().toLowerCase().contains(titular.toLowerCase())).toList();
     }
 
     @Override
     public List<Tarjeta> findAllByNumeroAndTitular(String numero, String titular) {
-        log.info("Buscando tarjetas por numero: {} y titular: {} ",numero , titular);
+        log.info("Buscando tarjetas en el repositorio por numero: {} y titular: {} ",numero , titular);
         return tarjetas.values().stream()
-                .filter(t-> t.getNumero().contains(numero.toLowerCase()))
-                .filter(t-> t.getTitular().contains(titular.toLowerCase()))
+                .filter(t-> t.getNumero().toLowerCase().contains(numero.toLowerCase()))
+                .filter(t-> t.getTitular().toLowerCase().contains(titular.toLowerCase()))
                 .toList();
     }
 
@@ -81,7 +81,7 @@ public class TarjetasRepositoryImpl implements TarjetasRepository{
 
     @Override
     public Optional<Tarjeta> findByUuid(UUID uuid) {
-        log.info("Buscando tarjetas por uuid: " + uuid);
+        log.info("Buscando tarjeta por uuid: {}" , uuid);
         return tarjetas.values().stream()
                 .filter(t-> t.getUuid().equals(uuid))
                 .findFirst();

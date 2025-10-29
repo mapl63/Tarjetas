@@ -56,7 +56,7 @@ public class TarjetaMapper {
                 .build();
     }
 
-    public List<TarjetaResponseDto> toTarjetaResponseDto(List<Tarjeta> tarjetas) {
+    public List<TarjetaResponseDto> toTarjetaResponseDtoList(List<Tarjeta> tarjetas) {
         return tarjetas.stream()
                 .map(this::toTarjetaResponseDto)
                 .toList();
