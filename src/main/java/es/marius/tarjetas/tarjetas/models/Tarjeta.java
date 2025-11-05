@@ -1,7 +1,7 @@
 package es.marius.tarjetas.tarjetas.models;
 
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,19 +9,36 @@ import java.util.UUID;
 
 
 @Builder
-@Data
+@ToString
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "TARJETAS")
+
 public class Tarjeta {
-
-    private  Long id;
-
+    @Id // Indicamos que es el ID de la tabla
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Indicamos que es autoincremental y por el script de datos
+    private Long id;
+    @Column(nullable = false, length = 19)
     private String numero;
-    private  String cvc;
-    private  LocalDate fechaCaducidad;
-    private  String titular;
-    private  Double saldo;
+    @Column(nullable = false, length = 3)
+    private String cvc;
+    private LocalDate fechaCaducidad;
+    @Column(nullable = false, length = 50)
+    private String titular;
+    @Column(nullable = false)
+    private Double saldo;
+    @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt;
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private LocalDateTime updatedAt;
+    @Column(unique = true, updatable = false, nullable = false)
+    private UUID uuid;
 
-    private  LocalDateTime createdAt;
-    private  LocalDateTime updatedAt;
-    private  UUID uuid;
+    // nueva columna
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isDeleted;
 
 }

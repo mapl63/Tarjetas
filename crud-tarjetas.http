@@ -5,31 +5,31 @@ GET https://examples.http-client.intellij.net/get
 ###
 
 ### getTarjetasALl
-GET http://localhost:3000/api/v1/tarjetas
+GET http://localhost:3001/api/v1/tarjetas
 
 ### getTarjetasAllByNumeroAndTitular
-GET http://localhost:3000/api/v1/tarjetas?numero=1234&titular=juan
+GET http://localhost:3001/api/v1/tarjetas?numero=1234&titular=juan
 
 ### getTarjetaById
-GET http://localhost:3000/api/v1/tarjetas/1
+GET http://localhost:3001/api/v1/tarjetas/1
 
 ### getTarjetaById(que no existe)
-GET http://localhost:3000/api/v1/tarjetas/3
+GET http://localhost:3001/api/v1/tarjetas/3
 
-###Nueva tarjeta Bien
-POST http://localhost:3000/api/v1/tarjetas
+### Nueva tarjeta Bien
+POST http://localhost:3001/api/v1/tarjetas
 content-type: application/json
 
 {
-    "numero": "2222-5678-1234-5678",
-    "cvc": "123",
-    "fechaCaducidad" : "2029-12-31",
-    "titular": "Maria",
-    "saldo": 300.0
+  "numero": "2222-5678-1234-5678",
+  "cvc": "123",
+  "fechaCaducidad" : "2029-12-31",
+  "titular": "Maria",
+  "saldo": 300.0
 }
 
-###Nueva tarjeta Mala validación
-POST http://localhost:3000/api/v1/tarjetas
+### Nueva tarjeta Mala validación
+POST http://localhost:3001/api/v1/tarjetas
 content-type: application/json
 
 {
@@ -40,9 +40,8 @@ content-type: application/json
   "saldo": 300.0
 }
 
-
 ### Actualiza tarjeta
-PUT http://localhost:3000/api/v1/tarjetas/1
+PUT http://localhost:3001/api/v1/tarjetas/1
 Content-Type: application/json
 
 {
@@ -53,7 +52,5 @@ Content-Type: application/json
   "saldo": 300.0
 }
 
-
 ### Delete tarjeta
-DELETE http://localhost:3000/api/v1/tarjetas/2
-
+DELETE http://localhost:3001/api/v1/tarjetas/2
